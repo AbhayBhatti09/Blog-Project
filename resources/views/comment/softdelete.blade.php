@@ -1,8 +1,19 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Comment') }}
-        </h2>
+    <div class="flex">
+                    <!--post -->
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link href="{{ route('soft.index') }}" :active="request()->routeIs('soft.index')">
+                            {{ __('Restore Post') }}
+                        </x-nav-link>
+                    </div>
+                      <!--comment -->
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link href="{{ route('soft.comment.index') }}" :active="request()->routeIs('soft.comment.index')">
+                            {{ __('Restore Comment') }}
+                        </x-nav-link>
+                    </div>
+                </div>
     </x-slot>
    
 
@@ -14,6 +25,10 @@
                         {{ session('success') }}
                     </div>
                 @endif
+                <div class="text-right">
+            <a href="{{route('comment.restore.all')}}" class="bg-blue-500 text-white px-4 py-2 rounded ">restore All</a>
+            </div>
+
                
                 <table class="min-w-full mt-4 border-collapse border border-gray-300" id="">
                     <thead>
@@ -56,39 +71,16 @@
                         </th>
                         <th class="border border-gray-300 px-4 py-2">
                             
-                        </a>    
-                        <a href="" 
-                        class="r px-3 py-1 rounded hover:bg-blue-600"  data-bs-toggle="modal" data-bs-target="#deleteModal_{{$comment->id}}"  data-comment-id="{{ $comment->id }}" title="status" data-bs>
-                        <i class="fas fa-edit"></i>
-                        </a>
-                        <a href="{{route('comment.delete',$comment->id)}}" 
-                        class="show_confirm px-3 py-1 rounded hover:bg-red-600" id="softdelete" title="delete" data-bs>
-                        <i class="fas fa-trash"></i>
-                        </a>
+                        <a href="{{route('comment.restore',$comment->id)}}" 
+                        class="btn-outline-danger px-3 py-1 rounded hover:bg-blue-600"  id="confirmDelete" title="restore" data-bs>
+                        <i class="fas fa-trash-restore"></i>
+                        </a>  
+                       
                        
                        
 
                         </th>
-                         <!--edit Modal -->
-                         <div class="modal fade" id="deleteModal_{{$comment->id}}" tabindex="-1" aria-labelledby="deleteModalLabel_{{$comment->id}}" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="deleteModal_{{$comment->id}}"> Comment Status</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                    Are you sure you want to this comment Approve or disable in this blog?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <a href="{{route('comment.status',$comment->id)}}" class="btn btn-success" id="confirmDelete">Approve</a>
-                                        <a href="{{route('comment.disable',$comment->id)}}" class="btn btn-warning" id="confirmDelete">disable</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         
-
                         </tbody>
 
                         @endforeach
@@ -102,11 +94,31 @@
     </div>
 
 
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Restore Post</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to Restore this Post?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="#" class="btn btn-primary" id="confirmDelete">Restore</a>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
                 document.addEventListener('DOMContentLoaded', function() {
     const deleteBtns = document.querySelectorAll('.btn-outline-danger');
 
     deleteBtns.forEach(btn => {
+       // alert('ab');
         btn.addEventListener('click', function(e) {
             e.preventDefault(); // Prevents the link's default behavior
             const deleteUrl = this.getAttribute('href');
@@ -120,37 +132,6 @@
         });
     });
 });
-
-  </script>
-
- 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
-
-<script type="text/javascript">
-
-$('.show_confirm').click(function(event) {
-    event.preventDefault();  // Prevent default link action
-
-    var url = $(this).attr('href');  // Get the URL to redirect to after confirmation
-    var name = $(this).data("name");
-
-    swal({
-        title: `Are you sure you want to delete this record?`,
-        text: "This action will soft delete the record.",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    })
-    .then((willDelete) => {
-        if (willDelete) {
-            window.location.href = url;  // Redirect to the delete route after confirmation
-        }
-    });
-});
-
-
-</script>
 
   
 

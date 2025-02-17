@@ -6,42 +6,49 @@ use Auth;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
-    public function index(){
-        $user_id=Auth::id();
+    public function index(Request $request){
+      //  $user_id=Auth::id();
         // dd($user_id);
         $categories=Category::all();
-        $Posts=Post::where('author_id',$user_id)
-        ->with(['category'])->latest()->paginate(5);
+        $search = $request->input('search');
+        $category_id = $request->input('category');
+        //$Posts = Post::orderBy('created_at', 'desc')->paginate(5);
+        $Posts = Post::when($search, function ($query) use ($search) {
+          return $query->where('title', 'LIKE', "%{$search}%")
+                       ->orWhere('content', 'LIKE', "%{$search}%");
+      })
+      ->when($category_id, function ($query) use ($category_id) {
+          return $query->where('category_id', $category_id);
+      })
+      ->orderBy('created_at', 'desc')
+      ->paginate(6);
+        
       //  dd($Posts);
    
-        $search = request()->get('search');
-        if ($search) {
-            $Posts->where('title', 'like', '%' . $search . '%')->latest()->paginate(5);
-        }
-       // dd($search);
-            $categoryId = request()->get('category');
-            if ($categoryId) {
-                $Posts->where('category_id', $categoryId)->latest()->paginate(5);
-            }
-      
+       
    
-         return view('blog.index',compact('Posts','categories','search'));
+         return view('blog.index',compact('Posts','categories'));
     }
     //show blog
     public function show($id){
         //dd($id);
         $post=Post::where('id',$id)->first();
-        $user_id=Auth::id();
+      //  $user_id=Auth::id();
         $user=User::where('id',$post->author_id)->first();
         $category=Category::where('id',$post->category_id)->first();
+        $comments=Comment::where('post_id',$id)->where('status',1)->with(['user','reply'])->latest()->get();
+      //  dd($comments);
        // dd($category);
-       // dd($post);
+      // $content=htmlspecialchars($post->content);
+      //  dd(($content));
       // dd($user->name);
        $data=[
+        'id'=>$post->id,
         'title'=>$post->title,
         'content'=>$post->content,
         'Category'=>$category->name,
@@ -50,7 +57,23 @@ class BlogController extends Controller
         'author_name'=>$user->name,
        ];
 
-       return view('Blog.show',compact('data'));
+       return view('Blog.show',compact('data','comments'));
 
+    }
+
+    //comment store
+    public function store($id,request $request){
+       // dd($request->all());
+        $request->validate([
+            'comment'=>'required',
+        ]);
+      //  dd($request->all());
+       $comment=new Comment();
+       $comment->user_id=$request->user_id;
+       $comment->post_id=$id;
+       $comment->content=$request->comment;
+       $comment->save();
+
+       return back()->with('success','your comment added');
     }
 }

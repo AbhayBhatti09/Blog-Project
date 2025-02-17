@@ -22,7 +22,17 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
 <!--use Ck editor-->
-<script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
+<script src="//cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+
+       $('.ckeditor').ckeditor();
+
+    });
+
+</script>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

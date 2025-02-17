@@ -5,6 +5,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryContrroller;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ReplyController;
+
 use App\Livewire\BlogComponent;
 
 /*
@@ -49,8 +51,34 @@ Route::middleware([
 
     //comment
     Route::get('/comment',[CommentController::class,'index'])->name('comment.index');
+    Route::get('/comment/status/{id}',[CommentController::class,'status'])->name('comment.status');
+    Route::get('/comment/disable/{id}',[CommentController::class,'disable'])->name('comment.disable');
+    Route::post('/comments/{comment}/reply', [CommentController::class, 'storeReply'])->name('comments.storeReply');
+    Route::get('/comments/delete/{id}',[CommentController::class,'delete'])->name('comment.delete');
+
+    //Replies
+    Route::get('Replies',[ReplyController::class,'index'])->name('reply.index');
+    Route::get('Replies/status/{id}',[ReplyController::class,'status'])->name('reply.status');
+    Route::get('Replies/disable/{id}',[ReplyController::class,'disable'])->name('reply.disable');
 
     //Blog
     Route::get('Blog',[BlogController::class,'index'])->name('blog.index');
     Route::get('Blog/{id}',[BlogController::class,'show'])->name('blog.show');
+    Route::post('blog/{id}/store',[BlogController::class,'store'])->name('comment.store');
+
+    //soft delete data 
+    Route::get('restore/post',[PostController::class,'softindex'])->name('soft.index');
+    Route::get('restore/post/{id}',[PostController::class,'restore'])->name('post.restore');
+    Route::get('post/restore',[PostController::class,'restore_all'])->name('post.restore.all');
+
+    //soft delete comment
+    Route::get('restore/comment',[CommentController::class,'softindex'])->name('soft.comment.index');
+    Route::get('restore/comment/{id}',[CommentController::class,'restore'])->name('comment.restore');
+    Route::get('comment/restore',[CommentController::class,'restore_all'])->name('comment.restore.all');
+
+
+    
 });
+ //Blog
+ Route::get('Blog',[BlogController::class,'index'])->name('blog.index');
+ Route::get('Blog/{id}',[BlogController::class,'show'])->name('blog.show');

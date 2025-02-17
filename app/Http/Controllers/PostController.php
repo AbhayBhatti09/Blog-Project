@@ -13,8 +13,11 @@ class PostController extends Controller
     public function index(){
       $user_id=Auth::id();
      // dd($user_id);
+     $user=User::where('id',$user_id)->first();
+     
+     //dd($user);
      $Posts=Post::where('author_id',$user_id)
-     ->with(['category'])->latest()->paginate(5);
+     ->with(['category','user'])->latest()->paginate(5);
    //  dd($Posts);
 
 
@@ -83,29 +86,35 @@ class PostController extends Controller
     //post update data 
     public function update($id,request $request){
       //dd($id);
-      //dd($request->all());
+    //  dd($request->all());
       $request->validate([
         'title'=>'required',
         'content'=>'required',
         'author_name'=>'required',
         'category_name'=>'required',
-        'image'=>'required|image|mimes:jpeg,png,jpg|max:2048',
+       // 'image'=>'required',
       ]);
      // dd($request->all());
      //image
-     $imageName = time().'.'.$request->image->extension();  
-     $request->image->move(public_path('images'), $imageName);
-    // $Post->image=$imageName;
-
-
+     if($request->image){
+      $imageName = time().'.'.$request->image->extension();  
+      $request->image->move(public_path('images'), $imageName);
       $post=Post::where('id',$id)->update(['title'=>$request->title,'content'=>$request->content,'author_id'=>$request->author_name,'category_id'=>$request->category_name,'image'=>$imageName]);
+
+     }else{
+      $post=Post::where('id',$id)->update(['title'=>$request->title,'content'=>$request->content,'author_id'=>$request->author_name,'category_id'=>$request->category_name]);
+
+     }
+     // $Post->image=$imageName;
+
+
       return redirect('post')->with('success','Post Updated Successfully');
     }
 
     // post delete 
     public function delete($id){
       //dd($id);
-      $post=Post::find($id);
+      $post=Post::findOrFail($id);
       $post->delete();
       return redirect('post')->with('success','post deleted successfully');
     }
@@ -121,4 +130,23 @@ class PostController extends Controller
 
   //     return view('post.blog',compact('Posts'));
   //   }
+
+  public function softindex(){
+    $Posts = Post::onlyTrashed()->with(['category'])->latest()->paginate(5);
+    return view('post.softdeleteindex',compact('Posts'));
+
+   // dd($posts);
+    
+  }
+  public function restore($id){
+   // dd($id);
+    $post = Post::withTrashed()->find($id);
+    $post->restore();
+    return back()->with('success','Post restored return');
+  }
+  public function restore_all(){
+    $post = Post::withTrashed();
+    $post->restore();
+    return back()->with('success','Post restored return All');
+  }
 }

@@ -1,44 +1,73 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="">
                         <x-application-mark class="block h-9 w-auto" />
                     </a>
                 </div>
-
+                @if (Auth::check())
                 <!-- Navigation Links -->
+                 @if(Auth::User()->role==1)
+                    
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link href="{{ route('blog.index') }}" :active="request()->routeIs('blog.index')">
+                            {{ __('Blog') }}
+                        </x-nav-link>
+                    </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link href="{{ route('post.index') }}" :active="request()->routeIs('post.index')">
+                            {{ __('Post') }}
+                        </x-nav-link>
+                    </div>
+                    
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link href="{{ route('category.index') }}" :active="request()->routeIs('category.index')">
+                            {{ __('Category') }}
+                        </x-nav-link>
+                    </div>
+                
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link href="{{ route('comment.index') }}" :active="request()->routeIs('comment.index')">
+                            {{ __('Comment') }}
+                        </x-nav-link>
+                    </div>
+                    
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link href="{{ route('reply.index') }}" :active="request()->routeIs('reply.index')">
+                            {{ __('Replies') }}
+                        </x-nav-link>
+                    </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link href="{{ route('soft.index') }}" :active="request()->routeIs('soft.index') || request()->routeIs('soft.comment.index')">
+                            {{ __('Restore') }}
+                        </x-nav-link>
+                    </div>
+                    
+                 @else
+                    
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link href="{{ route('blog.index') }}" :active="request()->routeIs('blog.index')">
+                            {{ __('Blog') }}
+                        </x-nav-link>
+                    </div>
+              
+                 @endif
+           
+                @else
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('blog.index') }}" :active="request()->routeIs('blog.index')">
+                    <x-nav-link href="{{ route('blog.index') }}" :active="request()->routeIs('blog.index') ">
                         {{ __('Blog') }}
                     </x-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('post.index') }}" :active="request()->routeIs('post.index')">
-                        {{ __('Post') }}
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('category.index') }}" :active="request()->routeIs('category.index')">
-                        {{ __('Category') }}
-                    </x-nav-link>
-                </div>
-              
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('comment.index') }}" :active="request()->routeIs('comment.index')">
-                        {{ __('Comment') }}
-                    </x-nav-link>
-                </div>
-            </div>
 
+                @endif
+            </div>
+            @if (Auth::check())
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <!-- Teams Dropdown -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
@@ -144,7 +173,8 @@
                     </x-dropdown>
                 </div>
             </div>
-
+            @endif
+            
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
@@ -158,6 +188,8 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
+    @if (Auth::check())
+
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
@@ -237,4 +269,5 @@
             </div>
         </div>
     </div>
+    @endif
 </nav>

@@ -1,8 +1,19 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Post') }}
-        </h2>
+                <div class="flex">
+                    <!--post -->
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link href="{{ route('soft.index') }}" :active="request()->routeIs('soft.index')">
+                            {{ __('Restore Post') }}
+                        </x-nav-link>
+                    </div>
+                      <!--comment -->
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link href="{{ route('soft.comment.index') }}" :active="request()->routeIs('soft.comment.index')">
+                            {{ __('Restore Comment') }}
+                        </x-nav-link>
+                    </div>
+                </div>
     </x-slot>
 
     <div class="py-12">
@@ -14,7 +25,7 @@
                     </div>
                 @endif
             <div class="text-right">
-            <a href="{{route('post.create')}}" class="bg-blue-500 text-white px-4 py-2 rounded ">Add Post</a>
+            <a href="{{route('post.restore.all')}}" class="bg-blue-500 text-white px-4 py-2 rounded ">restore All</a>
             </div>
 
             <table class="min-w-full mt-4 border-collapse border border-gray-300">
@@ -23,10 +34,10 @@
                         <th class="border border-gray-300 px-4 py-2">ID</th>
                         <th class="border border-gray-300 px-4 py-2">Title</th>
                         <th class="border border-gray-300 px-4 py-2">Category</th>
-                        <th class="border border-gray-300 px-4 py-2">Author Name</th>
+                        <th class="border border-gray-300 px-4 py-2">Content</th>
                         <th class="border border-gray-300 px-4 py-2">Created at</th>
+                        <th class="border border-gray-300 px-4 py-2">Restore</th>
                         
-                        <th class="border border-gray-300 px-4 py-2">Action</th>
 
 
                     </tr>
@@ -42,17 +53,13 @@
                             @else
                                 <th class="border border-gray-300 px-4 py-2">--</th>
                             @endif
-                            <th class="border border-gray-300 px-4 py-2">{{$post->user->name }}</th>
+                            <th class="border border-gray-300 px-4 py-2">{!!$post->content !!}</th>
                             <th class="border border-gray-300 px-4 py-2">{{$post->updated_at->format('Y-m-d h:m A')}}</th>
                             <th class="border border-gray-300 px-4 py-2">
-                        <a href="{{route('post.edit',$post->id)}}" 
-                        class="  px-3 py-1 rounded hover:bg-blue-600" title="Edit">
-                        <i class="fas fa-edit"></i>
-                            
-                        </a>    
-                        <a href="{{route('post.delete',$post->id)}}" 
-                        class="btn-outline-danger px-3 py-1 rounded hover:bg-red-600"  title="delete" data-bs>
-                        <i class="fas fa-trash-alt"></i>
+                           
+                        <a href="{{route('post.restore',$post->id)}}" 
+                        class="btn-outline-danger px-3 py-1 rounded hover:bg-blue-600"  title="restore" data-bs>
+                        <i class="fas fa-trash-restore"></i>
                         </a>
 
                         </th>
@@ -74,15 +81,15 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <h5 class="modal-title" id="deleteModalLabel">Restore Post</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete this Category?
+                Are you sure you want to Restore this Post?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <a href="#" class="btn btn-danger" id="confirmDelete">Delete</a>
+                <a href="#" class="btn btn-primary" id="confirmDelete">Restore</a>
             </div>
         </div>
     </div>

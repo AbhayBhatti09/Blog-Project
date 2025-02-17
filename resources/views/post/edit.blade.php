@@ -24,7 +24,7 @@
                     </div>
                     <div class="col-md-12 mb-4">
                         <label for="name" class="block text-gray-700 text-md font-bold mb-2">Content</label>
-                        <textarea name="content" id="" value="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <textarea name="content" id="" value="" class="ckeditor shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         {{old('content',$post->content)}}
                         </textarea>
                         @error('content')
@@ -130,5 +130,7 @@
             uploadedAvatar.src = URL.createObjectURL(file); // Update image src with selected file
         }
     });
-</script> 
+</script>
+
+
 </x-app-layout>

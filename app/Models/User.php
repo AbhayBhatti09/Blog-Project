@@ -9,6 +9,10 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\comment;
+use App\Models\Reply;
+use App\Models\Post;
+
 
 class User extends Authenticatable
 {
@@ -59,4 +63,17 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function comment()
+    {
+        return $this->hasMany(Comment::class, 'user_id');
+    }
+    //
+    public function reply(){
+        return $this->hasMany(Reply::class,'user_id');
+    }
+
+    public function post(){
+        return $this->hasMany(Post::class,'author_id');
+    }
 }

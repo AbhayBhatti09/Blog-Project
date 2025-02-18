@@ -5,18 +5,19 @@ use App\Models\Reply;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Neasted_Comment;
 
 use Illuminate\Http\Request;
 
 class ReplyController extends Controller
 {
     public function index(){
-        $Replies=Reply::orderBy('created_at', 'desc')->with(['user','comment'])->paginate(5);
+        $Replies=Neasted_Comment::where('parent_id', '!=', null)->orderBy('created_at', 'desc')->with(['user','parent'])->paginate(5);
         $users=User::all();
-        $comments=Comment::all();
+        $comments=Neasted_Comment::all();
         $posts=Post::all();
        
-       // dd($Replies);
+      //  dd($Replies);
 
         return view('reply.index',compact('Replies','users','posts','comments'));
     }
@@ -25,7 +26,7 @@ class ReplyController extends Controller
     public function status($id){
         // dd($id);
  
-         $reply=Reply::where('id',$id)->update(['status'=>1]);
+         $reply=Neasted_Comment::where('id',$id)->update(['status'=>1]);
          return redirect('Replies')->with('success','Repliy to comment Approved');
         // dd($comment);
      }
@@ -34,7 +35,7 @@ class ReplyController extends Controller
      public function disable($id){
         // dd($id);
  
-         $reply=Reply::where('id',$id)->update(['status'=>0]);
+         $reply=Neasted_Comment::where('id',$id)->update(['status'=>0]);
          return redirect('Replies')->with('success','Repliy to comment Approved');
         // dd($comment);
      }

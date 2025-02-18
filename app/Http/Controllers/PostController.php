@@ -68,6 +68,7 @@ class PostController extends Controller
 
     //edit post data
     public function edit($id){
+      
       $post=Post::where('id',$id)->first();
       $user_id=Auth::id();
       $user=User::where('id',$user_id)->first();

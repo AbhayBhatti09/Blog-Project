@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('post', function (Blueprint $table) {
             $table->softDeletes();
+           
         });
     }
 

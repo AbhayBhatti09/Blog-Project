@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('comments', function (Blueprint $table) {
-            $table->integer('parent_id')->unsigned();
+        Schema::table('neasted_comments', function (Blueprint $table) {
+            $table->string('status')->default(1);
+            $table->softDeletes();
+
         });
     }
 
@@ -21,6 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('neasted_comments', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

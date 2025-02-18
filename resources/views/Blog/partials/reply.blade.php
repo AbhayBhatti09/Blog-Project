@@ -1,4 +1,4 @@
-<div class="bg-gray-50 p-3 rounded-lg shadow mt-2" id="comment-{{ $reply->id }}">
+<div class="bg-white-50 p-3 rounded-lg shadow mt-2" id="comment-{{ $reply->id }}">
     <div class="flex items-center gap-3">
         @if($reply->user->profile_photo_path)
             <img src="{{ asset('storage/'.$reply->user->profile_photo_path) }}" 

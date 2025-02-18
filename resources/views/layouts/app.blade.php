@@ -21,19 +21,12 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
+
 <!--use Ck editor-->
-<script src="//cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
 
-<script type="text/javascript">
 
-    $(document).ready(function() {
 
-       $('.ckeditor').ckeditor();
-
-    });
-
-</script>
-
+<!-- <script src="//cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script> -->
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -45,6 +38,7 @@
         @livewireStyles
     </head>
     <body class="font-sans antialiased">
+   
         <x-banner />
 
         <div class="min-h-screen bg-gray-100">

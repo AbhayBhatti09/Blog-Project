@@ -41,10 +41,10 @@
                         <th class="border border-gray-300 px-4 py-2">{{$post->title}}</th>
                         @endif
                         @php
-                                $comment = $comments->firstWhere('id', $reply->comment_id);
+                                $comment = $comments->firstWhere('id', $reply->parent_id);
                         @endphp
                         @if($comment)
-                        <th class="border border-gray-300 px-4 py-2">{{$comment->content}}</th>
+                        <th class="border border-gray-300 px-4 py-2">{{$comment->body}}</th>
                         @endif
 
                         @php
@@ -55,7 +55,7 @@
                         @endif
 
                        
-                        <th class="border border-gray-300 px-4 py-2">{{$reply->reply}}</th>
+                        <th class="border border-gray-300 px-4 py-2">{{$reply->body}}</th>
                         @php
                                 $user = $users->firstWhere('id', $reply->user_id);
                         @endphp
@@ -77,6 +77,10 @@
                         <a href="" 
                         class="r px-3 py-1 rounded hover:bg-blue-600"  data-bs-toggle="modal" data-bs-target="#deleteModal_{{$reply->id}}"  data-comment-id="{{ $reply->id }}" title="status" data-bs>
                         <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{{route('comment.delete',$comment->id)}}" 
+                        class="show_confirm px-3 py-1 rounded hover:bg-red-600" id="softdelete" title="delete" data-bs>
+                        <i class="fas fa-trash"></i>
                         </a>
 
                        
@@ -108,6 +112,7 @@
                        
                 </table>
                 <div>
+                    {{ $Replies->links() }} 
                 </div>
             </div>
         </div>
@@ -133,5 +138,33 @@
 });
 
               </script> -->
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+
+<script type="text/javascript">
+
+$('.show_confirm').click(function(event) {
+    event.preventDefault();  // Prevent default link action
+
+    var url = $(this).attr('href');  // Get the URL to redirect to after confirmation
+    var name = $(this).data("name");
+
+    swal({
+        title: `Are you sure you want to delete this reply?`,
+        text: "This action will soft delete the reply.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((willDelete) => {
+        if (willDelete) {
+            window.location.href = url;  // Redirect to the delete route after confirmation
+        }
+    });
+});
+
+
+</script>
+
 </x-app-layout>
 

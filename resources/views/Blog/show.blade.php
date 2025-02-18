@@ -31,7 +31,7 @@
               
 
 
-                <div class="mt-4 text-gray-800">
+                <div class="ck-content mt-4 text-gray-800">
                 {!!($data['content']) !!}
                 </div>
                 <p class="text-lg text-gray-600 mt-2">Publish on: {{ $data['author_name'] }} , {{$data['created_at']->diffForHumans()}} </p>
@@ -41,7 +41,7 @@
                     <div class="space-y-4">
                     @if($comments)
     @foreach($comments as $comment)
-        <div class="bg-gray-100 p-4 rounded-lg shadow mb-4" id="comment-{{ $comment->id }}">
+        <div class="bg-white-100 p-4 rounded-lg shadow mb-4" id="comment-{{ $comment->id }}">
             <div class="flex items-center gap-3">
                 @if($comment->user->profile_photo_path)
                     <img src="{{ asset('storage/'.$comment->user->profile_photo_path) }}" 
@@ -169,6 +169,30 @@
 });
 
   </script>
+  <style>
+    .ck-content .image {
+    max-width: 100%;
+    height: auto;
+}
+
+.image-style-align-left {
+    float: left;
+    margin-right: 1rem;
+    max-width: 50%;
+}
+
+.image-style-align-right {
+    float: right;
+    margin-left: 1rem;
+    max-width: 50%;
+}
+
+.image-style-block {
+    display: block;
+    margin: 0 auto;
+}
+
+  </style>
 
 
 <script>

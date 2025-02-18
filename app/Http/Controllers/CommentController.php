@@ -5,13 +5,14 @@ use App\Models\Comment;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Reply;
+use App\Models\Neasted_Comment;
 
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
     public function index(){
-        $comments=Comment::orderBy('created_at', 'desc')->paginate(5);
+        $comments=Neasted_Comment::where('parent_id',null)->orderBy('created_at', 'desc')->paginate(5);
         $users=User::all();
         $posts=Post::all();
         
@@ -22,7 +23,7 @@ class CommentController extends Controller
     public function status($id){
        // dd($id);
 
-        $comment=Comment::where('id',$id)->update(['status'=>1]);
+        $comment=Neasted_Comment::where('id',$id)->update(['status'=>1]);
         return redirect('comment')->with('success','Comment Approved');
        // dd($comment);
     }
@@ -30,7 +31,7 @@ class CommentController extends Controller
     public function disable($id){
         //dd($id);
 
-        $comment=Comment::where('id',$id)->update(['status'=>0]);
+        $comment=Neasted_Comment::where('id',$id)->update(['status'=>0]);
         return redirect('comment')->with('success','Comment disabled');
        // dd($comment);
     }
@@ -66,7 +67,7 @@ class CommentController extends Controller
     $reply = new Reply();
     $reply->comment_id = $commentId;
     $reply1=Reply::where('id',$commentId)->first();
-    $reply->comment_type='reply';
+    $reply->comment_type='reply ';
    // dd($comment);
     $Post=Post::where('id',$reply1->post_id)->first();
  //   dd($Post);
@@ -84,13 +85,13 @@ class CommentController extends Controller
 
 public function delete($id)
 {
-   // dd($id);
-    $comment = Comment::findOrFail($id);
+  //  dd($id);
+    $comment = Neasted_Comment::findOrFail($id);
     $comment->delete(); 
     return redirect('comment')->with('success','Comment deleted');
 }
 public function softindex(){
-    $comments=Comment::onlyTrashed()->orderBy('created_at', 'desc')->paginate(5);
+    $comments=Neasted_Comment::onlyTrashed()->orderBy('created_at', 'desc')->paginate(5);
     $users=User::all();
     $posts=Post::all();
   
@@ -99,13 +100,13 @@ public function softindex(){
 }
 public function restore($id){
     // dd($id);
-     $comment = Comment::withTrashed()->find($id);
+     $comment = Neasted_Comment::withTrashed()->find($id);
      $comment->restore();
      return back()->with('success','Comment restored return');
    }
 
    public function restore_all(){
-    $comment = Comment::withTrashed();
+    $comment = Neasted_Comment::withTrashed();
     $comment->restore();
     return back()->with('success','Comment restored return All');
   }

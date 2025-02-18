@@ -63,6 +63,7 @@ class BlogController extends Controller
         $category=Category::where('id',$post->category_id)->first();
       //  $comments=Comment::where('post_id',$id)->where('status',1)->with(['user','reply'])->latest()->get();
       $comments = Neasted_Comment::where('post_id', $id)
+      ->where('status',1)
       ->whereNull('parent_id')
       ->with('replies')
       ->latest()

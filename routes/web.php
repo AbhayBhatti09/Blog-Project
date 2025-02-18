@@ -7,6 +7,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\NeastedCommentController;
+use App\Http\Controllers\CkeditorController;
 
 use App\Livewire\BlogComponent;
 
@@ -80,9 +81,22 @@ Route::middleware([
     //Neasted Comment
     Route::post('Neasted_comments',[NeastedCommentController::class,'store'])->name('neasted.store');
 
+    //ckeditor add image
+
+   // Route::post('ckeditor/upload', [CkeditorController::class, 'upload'])->name('ckeditor.upload');
+    Route::get('ckeditor', [CkeditorController::class, 'index']);
+    Route::post('ckeditor/upload', [CkeditorController::class, 'upload'])->name('ckeditor.upload');
+
+
+
+
+
 
     
 });
  //Blog
  Route::get('Blog',[BlogController::class,'index'])->name('blog.index');
  Route::get('Blog/{id}',[BlogController::class,'show'])->name('blog.show');
+
+
+

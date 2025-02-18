@@ -60,7 +60,7 @@
                         <th class="border border-gray-300 px-4 py-2">{{$post->title}}</th>
                         @endif
 
-                        <th class="border border-gray-300 px-4 py-2">{{$comment->content}}</th>
+                        <th class="border border-gray-300 px-4 py-2">{{$comment->body}}</th>
                         <th class="border border-gray-300 px-4 py-2">{{$comment->updated_at->format('Y-m-d h:i A')}}</th>
                         <th class="border border-gray-300 px-4 py-2">
                             @if($comment->status==1)

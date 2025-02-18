@@ -25,7 +25,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="name" class="block text-gray-700 text-md font-bold mb-2">Content</label>
-                        <textarea name="content" id="ckeditor" value="{{old('content')}}" class="ckeditor shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <textarea name="content" id="editor" value="{{old('content')}}" class=" shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         </textarea>
                         @error('content')
                         <span class="text-red-500 text-sm">{{$message}}</span>
@@ -105,6 +105,17 @@
         </div>
     </div>
 </div>
+<style>
+
+.ck-editor__editable_inline {
+
+    min-height: 300px;
+
+}
+
+</style>
+<script src="https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js"></script>
+
 <script>
     document.getElementById('upload').addEventListener('change', function (event) {
      //   alert('ab');
@@ -115,5 +126,26 @@
         }
     });
 </script> 
+<script>
+
+    ClassicEditor
+
+        .create( document.querySelector( '#editor' ),{
+
+            ckfinder: {
+
+                uploadUrl: '{{route('ckeditor.upload').'?_token='.csrf_token()}}',
+
+            }
+
+        })
+
+        .catch( error => {
+
+              
+
+        } );
+
+</script>
 
 </x-app-layout>

@@ -24,7 +24,7 @@
                     </div>
                     <div class="col-md-12 mb-4">
                         <label for="name" class="block text-gray-700 text-md font-bold mb-2">Content</label>
-                        <textarea name="content" id="" value="" class="ckeditor shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <textarea name="content" id="editor" value="" class=" shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         {{old('content',$post->content)}}
                         </textarea>
                         @error('content')
@@ -131,6 +131,30 @@
         }
     });
 </script>
+<script src="https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js"></script>
+<script>
+
+    ClassicEditor
+
+        .create( document.querySelector( '#editor' ),{
+            
+
+            ckfinder: {
+
+                uploadUrl: '{{route('ckeditor.upload').'?_token='.csrf_token()}}',
+
+            }
+
+        })
+
+        .catch( error => {
+
+              
+
+        } );
+
+</script>
+
 
 
 </x-app-layout>

@@ -1,7 +1,9 @@
 @if($Posts->count() > 0)
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         @foreach($Posts as $post)
+           
             <div class="border p-4 rounded shadow">
+                <a href="{{ route('blog.show', $post->id) }}">
                 @if(!empty($post->image))
                     <img src="{{ asset('images/'.$post->image) }}" alt="{{ $post->title }}" class="w-full h-40 object-cover">
                 @else
@@ -18,6 +20,7 @@
                 @endif
                 
                 <a href="{{ route('blog.show', $post->id) }}" class="text-blue-500 mt-2 inline-block">Read More</a>
+                </a>
             </div>
         @endforeach
     </div>

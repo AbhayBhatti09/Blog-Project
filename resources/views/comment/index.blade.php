@@ -45,7 +45,7 @@
                         <th class="border border-gray-300 px-4 py-2">{{$post->title}}</th>
                         @endif
 
-                        <th class="border border-gray-300 px-4 py-2">{{$comment->content}}</th>
+                        <th class="border border-gray-300 px-4 py-2">{{$comment->body}}</th>
                         <th class="border border-gray-300 px-4 py-2">{{$comment->updated_at->format('Y-m-d h:i A')}}</th>
                         <th class="border border-gray-300 px-4 py-2">
                             @if($comment->status==1)
@@ -136,8 +136,8 @@ $('.show_confirm').click(function(event) {
     var name = $(this).data("name");
 
     swal({
-        title: `Are you sure you want to delete this record?`,
-        text: "This action will soft delete the record.",
+        title: `Are you sure you want to delete this Comment?`,
+        text: "This action will soft delete the Comment.",
         icon: "warning",
         buttons: true,
         dangerMode: true,

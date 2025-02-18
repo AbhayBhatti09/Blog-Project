@@ -6,11 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Post;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 
 class Neasted_Comment extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
     protected $table="neasted_comments";
     protected $fillable = ['user_id', 'post_id', 'parent_id', 'body'];
 
@@ -25,7 +29,7 @@ class Neasted_Comment extends Model
     }
 
     public function replies() {
-        return $this->hasMany(Neasted_Comment::class, 'parent_id')->with('replies');
+        return $this->hasMany(Neasted_Comment::class, 'parent_id')->with('replies')->where('status',1);
     }
 
 }

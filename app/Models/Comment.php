@@ -17,7 +17,9 @@ class Comment extends Model
    // protected $table="category";
     protected $fillable = [
         'user_id',
+        'post_id',
         'content',
+        'parent_id',
        
     ];
 

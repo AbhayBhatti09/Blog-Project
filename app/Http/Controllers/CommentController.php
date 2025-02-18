@@ -37,19 +37,47 @@ class CommentController extends Controller
 
     public function storeReply(Request $request, $commentId)
 {
+   // dd($request->all());
+   // dd($request->name);
     $request->validate([
         'reply' => 'required|string|max:255',
     ]);
+  
+   // dd($commentId);
+   if($request->comment_type=='comment'){
 
+  //  dd('ab');
     $reply = new Reply();
     $reply->comment_id = $commentId;
     $comment=Comment::where('id',$commentId)->first();
+    $reply->comment_type='comment';
+   // dd($comment);
     $Post=Post::where('id',$comment->post_id)->first();
  //   dd($Post);
     $reply->user_id = auth()->id(); 
     $reply->reply = $request->reply;
     $reply->post_id=$Post->id;
     $reply->save();
+   // dd($reply->save());
+   }
+   if($request->comment_type=='reply'){
+   // dd($commentId);
+   //dd('ab1');
+    $reply = new Reply();
+    $reply->comment_id = $commentId;
+    $reply1=Reply::where('id',$commentId)->first();
+    $reply->comment_type='reply';
+   // dd($comment);
+    $Post=Post::where('id',$reply1->post_id)->first();
+ //   dd($Post);
+    $reply->user_id = auth()->id(); 
+    $reply->reply = $request->reply;
+    $reply->post_id=$Post->id;
+    $reply->save();
+   // dd($reply->save());
+
+   }
+   
 
     return back(); 
 }

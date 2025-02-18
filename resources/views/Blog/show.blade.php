@@ -40,69 +40,47 @@
 
                     <div class="space-y-4">
                     @if($comments)
-                    @foreach($comments as $comment)
-                    <div class="bg-gray-100 p-4 rounded-lg shadow">
-                        <div class="flex items-center gap-3">
-                            @if($comment->user->profile_photo_path)
-                            <img src="{{asset('storage/'.$comment->user->profile_photo_path)}}" 
-                                alt="user" class="w-10 h-10 rounded-full object-cover">
-                            @else
-                            <img src="{{asset('storage/images/default.jpg')}}" 
-                                alt="user" class="w-10 h-10 rounded-full object-cover">
-                            @endif
-                            
+    @foreach($comments as $comment)
+        <div class="bg-gray-100 p-4 rounded-lg shadow mb-4" id="comment-{{ $comment->id }}">
+            <div class="flex items-center gap-3">
+                @if($comment->user->profile_photo_path)
+                    <img src="{{ asset('storage/'.$comment->user->profile_photo_path) }}" 
+                         alt="user" class="w-10 h-10 rounded-full object-cover">
+                @else
+                    <img src="{{ asset('storage/images/default.jpg') }}" 
+                         alt="user" class="w-10 h-10 rounded-full object-cover">
+                @endif
+                
+                <p class="text-gray-900 font-semibold">
+                    {{ $comment->user->name }} 
+                    <span class="text-gray-600 text-sm">({{ $comment->created_at->diffForHumans() }})</span>
+                </p>
+            </div>
 
-                            <p class="text-gray-900 font-semibold">
-                                {{$comment->user->name }} 
-                                <span class="text-gray-600 text-sm">({{ $comment->created_at->diffForHumans() }})</span>
-                            </p>
-                        </div>
+            <p class="text-gray-800 mt-2">{{ $comment->body }}</p>
 
-                        <p class="text-gray-800 mt-2">{{ $comment->content }}</p>
+            <div class="mt-4">
+                <button class="flex items-center text-blue-500 text-sm" onclick="showReplyForm({{ $comment->id }}, '{{ $comment->post_id }}')">
+                   
+                    Reply
+                </button>
+            </div>
 
-                        <div class="mt-4">
-                            <button class="text-blue-500 text-sm" onclick="toggleReplyForm({{ $comment->id }})">Reply</button>                           
-                            <div id="reply-form-{{ $comment->id }}" class="mt-2 hidden">
-                            <form action="{{ route('comments.storeReply', $comment->id) }}" method="POST">
-                                @csrf
-                                <textarea name="reply" class="w-full p-2 border rounded" placeholder="Write your reply..." rows="3"></textarea>
-                                @error('reply')
-                                <span class="text-danger">{{$message}}</span>
-                                @enderror
-                                <div class="mb-2">
-                                <button type="submit" class="mt-2 bg-blue-500 text-white p-2 rounded">Submit Reply</button>
-                                </div>
-                            </form>
-                         </div>
-                        </div>
-                        @foreach($comment->reply as $reply1)
-                            <div class="ml-6 mt-2 bg-gray-200 p-4 rounded-lg shadow">
-                                <div class="flex items-center gap-3">
-                                    @if($reply1->user->profile_photo_path)
-                                        <img src="{{asset('storage/'.$reply1->user->profile_photo_path)}}" 
-                                            alt="user" class="w-8 h-8 rounded-full object-cover">
-                                    @else
-                                        <img src="{{asset('storage/images/default.jpg')}}" 
-                                            alt="user" class="w-8 h-8 rounded-full object-cover">
-                                    @endif
+            @if($comment->replies)
+                <div class="ml-10 mt-3 border-l-2 border-gray-300 pl-4">
+                    @foreach ($comment->replies as $reply)
+                        @include('Blog.partials.reply', ['reply' => $reply])
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    @endforeach
+@endif
+                    <form method="POST" id="formdata" action="{{route('neasted.store')}}" class="mt-6">
 
-                                    <p class="text-gray-900 font-semibold">
-                                        {{$reply1->user->name }} 
-                                        <span class="text-gray-600 text-sm">({{ $reply1->created_at->diffForHumans() }})</span>
-                                    </p>
-                                </div>
-
-                                <p class="text-gray-800 mt-2">{{ $reply1->reply }}</p>
-                            </div>
-                        @endforeach
-                    </div>
-                        @endforeach
-                    </div>
-                    @endif
-
-                    <form method="POST" id="formdata" action="{{route('comment.store',$data['id'])}}" class="mt-6">
                         @csrf
                        @auth
+                       <input type="hidden" name="post_id" value="{{ $data['id'] }}">
                         <input type="hidden" name="user_id" value="{{Auth::User()->id}}">
                        @endauth
                         <div class="mb-4">
@@ -122,8 +100,25 @@
             </div>
         </div>
     </div>
+    <div id="global-reply-form" class="hidden bg-white p-4 rounded-lg shadow mt-4">
+    <form action="{{ route('neasted.store') }}" method="POST">
+        @csrf
+        <input type="hidden" name="post_id" id="global-post-id" value="">
+        <input type="hidden" name="parent_id" id="global-parent-id" value="">
+        <input type="hidden" name="comment_type" value="comment">
+        
+        <textarea name="comment" class="w-full p-2 border rounded" placeholder="Write your reply..." rows="3"></textarea>
+        @error('comment')
+            <span class="text-red-500">{{ $message }}</span>
+        @enderror
+        <div class="mt-2">
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded">Submit Reply</button>
+            <!-- Optional cancel button to hide the reply form -->
+            <button type="button" class="ml-2 p-2 border rounded" onclick="hideReplyForm()">Cancel</button>
+        </div>
+    </form>
+</div>
 
-<!--login page pop up-->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -175,10 +170,33 @@
 
   </script>
 
+
 <script>
-    function toggleReplyForm(commentId) {
-        const replyForm = document.getElementById('reply-form-' + commentId);
-        replyForm.classList.toggle('hidden');
+    // Function to move the global reply form to the desired comment container
+    function showReplyForm(commentId, postId) {
+        // Get the global reply form element
+        var replyForm = document.getElementById('global-reply-form');
+        
+        // Update the hidden input fields with the current post and parent comment IDs
+        document.getElementById('global-post-id').value = postId;
+        document.getElementById('global-parent-id').value = commentId;
+        
+        // Remove the reply form from its current parent (if any)
+        if(replyForm.parentNode) {
+            replyForm.parentNode.removeChild(replyForm);
+        }
+        
+        // Append the reply form to the current comment container so that it appears right below it
+        var commentContainer = document.getElementById('comment-' + commentId);
+        commentContainer.appendChild(replyForm);
+        
+        // Make sure the reply form is visible
+        replyForm.classList.remove('hidden');
     }
-</script>
-</x-app-layout>
+
+    // Optional: Function to hide the reply form if the user cancels
+    function hideReplyForm() {
+        var replyForm = document.getElementById('global-reply-form');
+        replyForm.classList.add('hidden');
+    }
+</script></x-app-layout>

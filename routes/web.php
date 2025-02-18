@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryContrroller;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ReplyController;
+use App\Http\Controllers\NeastedCommentController;
 
 use App\Livewire\BlogComponent;
 
@@ -75,6 +76,9 @@ Route::middleware([
     Route::get('restore/comment',[CommentController::class,'softindex'])->name('soft.comment.index');
     Route::get('restore/comment/{id}',[CommentController::class,'restore'])->name('comment.restore');
     Route::get('comment/restore',[CommentController::class,'restore_all'])->name('comment.restore.all');
+
+    //Neasted Comment
+    Route::post('Neasted_comments',[NeastedCommentController::class,'store'])->name('neasted.store');
 
 
     

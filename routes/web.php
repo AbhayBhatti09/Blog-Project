@@ -8,6 +8,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\NeastedCommentController;
 use App\Http\Controllers\CkeditorController;
+use App\Http\Controllers\FristPageController;
 
 use App\Livewire\BlogComponent;
 
@@ -97,6 +98,12 @@ Route::middleware([
  //Blog
  Route::get('Blog',[BlogController::class,'index'])->name('blog.index');
  Route::get('Blog/{id}',[BlogController::class,'show'])->name('blog.show');
+
+ // first Page
+ Route::get('home',[FristPageController::class,'home'])->name('home');
+ Route::get('/about-us',[FristPageController::class,'about_us'])->name('aboutus');
+ Route::get('/contact-us',[FristPageController::class,'contact_us'])->name('contactus');
+
 
 
 

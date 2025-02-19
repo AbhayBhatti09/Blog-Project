@@ -59,12 +59,20 @@
                  @endif
            
                 @else
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden sm:flex sm:space-x-8 sm:ms-10 justify-start ">
+
+                    <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home') ">
+                        {{ __('Home') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('aboutus') }}" :active="request()->routeIs('aboutus') ">
+                        {{ __('About us') }}
+                    </x-nav-link>
+                 <x-nav-link href="{{ route('contactus') }}" :active="request()->routeIs('contactus') ">
+                        {{ __('Contact Us') }}
+                    </x-nav-link>
                     <x-nav-link href="{{ route('blog.index') }}" :active="request()->routeIs('blog.index') ">
                         {{ __('Blog') }}
                     </x-nav-link>
-                </div>
-                <div class="text-right hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link href="{{ route('login') }}" :active="request()->routeIs('login') ">
                         {{ __('Login') }}
                     </x-nav-link>

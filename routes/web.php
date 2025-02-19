@@ -25,7 +25,7 @@ use App\Livewire\BlogComponent;
 
 Route::get('/', function () {
     return view('auth.login');
-});
+})->middleware('auth');
 
 Route::middleware([
     'auth:sanctum',

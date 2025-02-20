@@ -24,7 +24,7 @@ use App\Livewire\BlogComponent;
 */
 
 Route::get('/', function () {
-    return view('auth.login');
+    return view('dashboard');
 })->middleware('auth');
 
 Route::middleware([

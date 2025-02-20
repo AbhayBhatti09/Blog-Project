@@ -1,4 +1,3 @@
-<x-app-layout>
 
 <x-guest-layout>
     <x-authentication-card>
@@ -53,4 +52,3 @@
         </form>
     </x-authentication-card>
 </x-guest-layout>
-</x-app-layout>

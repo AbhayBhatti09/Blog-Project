@@ -10,15 +10,26 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
       $user_id=Auth::id();
      // dd($user_id);
      $user=User::where('id',$user_id)->first();
      
      //dd($user);
-     $Posts=Post::where('author_id',$user_id)
-     ->with(['category','user'])->latest()->paginate(5);
-   //  dd($Posts);
+     if ($request->has('status') && $request->status !== '' && $request->status !=null) {
+    //  dd($request->status);
+      $Posts=Post::where('author_id',$user_id)
+      ->where('publish_status', $request->status)
+      ->with(['category','user'])->latest()->paginate(5);
+    
+  }else{
+   // dd('ab');
+
+    $Posts=Post::where('author_id',$user_id)
+    ->with(['category','user'])->latest()->paginate(5);
+  
+  }
+    //  dd($Posts);
 
 
       return view('post.index',compact('Posts'));
@@ -41,7 +52,7 @@ class PostController extends Controller
 
     //store
     public function store(request $request){
-      //  dd($request->all());
+       // dd($request->all());
       $request->validate([
         'title'=>'required',
         'content'=>'required',   
@@ -50,12 +61,13 @@ class PostController extends Controller
         'image'=>'required|image|mimes:jpeg,png,jpg|max:2048',
 
       ]);
-      //dd($request->all());
+     // dd($request->all());
       $Post=new Post();
       $Post->title=$request->title;
       $Post->content=$request->content;
       $Post->author_id=$request->author_name;
       $Post->category_id=$request->category_name;
+      $Post->publish_status=$request->publish_status;
 
       //image 
       $imageName = time().'.'.$request->image->extension();  
@@ -87,7 +99,7 @@ class PostController extends Controller
     //post update data 
     public function update($id,request $request){
       //dd($id);
-    //  dd($request->all());
+     // dd($request->all());
       $request->validate([
         'title'=>'required',
         'content'=>'required',
@@ -100,10 +112,10 @@ class PostController extends Controller
      if($request->image){
       $imageName = time().'.'.$request->image->extension();  
       $request->image->move(public_path('images'), $imageName);
-      $post=Post::where('id',$id)->update(['title'=>$request->title,'content'=>$request->content,'author_id'=>$request->author_name,'category_id'=>$request->category_name,'image'=>$imageName]);
+      $post=Post::where('id',$id)->update(['title'=>$request->title,'content'=>$request->content,'author_id'=>$request->author_name,'category_id'=>$request->category_name,'image'=>$imageName,'publish_status'=>$request->publish_status]);
 
      }else{
-      $post=Post::where('id',$id)->update(['title'=>$request->title,'content'=>$request->content,'author_id'=>$request->author_name,'category_id'=>$request->category_name]);
+      $post=Post::where('id',$id)->update(['title'=>$request->title,'content'=>$request->content,'author_id'=>$request->author_name,'category_id'=>$request->category_name,'publish_status'=>$request->publish_status]);
 
      }
      // $Post->image=$imageName;

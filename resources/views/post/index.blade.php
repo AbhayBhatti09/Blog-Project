@@ -13,9 +13,21 @@
                         {{ session('success') }}
                     </div>
                 @endif
-            <div class="text-right">
-            <a href="{{route('post.create')}}" class="bg-blue-500 text-white px-4 py-2 rounded ">Add Post</a>
-            </div>
+                <div class="flex justify-between items-center mb-4">
+    <form method="GET" action="{{ route('post.index') }}">
+        <label for="statusFilter" class="mr-2">Filter by Status:</label>
+        <select name="status" id="statusFilter" class="border border-gray-300 px-3 py-2 rounded">
+            <option value="">All</option>
+            <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Published</option>
+            <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Draft</option>
+        </select>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded ml-2">Filter</button>
+    </form>
+
+    <a href="{{route('post.create')}}" class="bg-blue-500 text-white px-4 py-2 rounded">
+        Add Post
+    </a>
+</div>
 
             <table class="min-w-full mt-4 border-collapse border border-gray-300">
                 <thead>
@@ -24,6 +36,7 @@
                         <th class="border border-gray-300 px-4 py-2">Title</th>
                         <th class="border border-gray-300 px-4 py-2">Category</th>
                         <th class="border border-gray-300 px-4 py-2">Author Name</th>
+                        <th class="border border-gray-300 px-4 py-2">Post Status</th>
                         <th class="border border-gray-300 px-4 py-2">Created at</th>
                         
                         <th class="border border-gray-300 px-4 py-2">Action</th>
@@ -43,6 +56,14 @@
                                 <th class="border border-gray-300 px-4 py-2">--</th>
                             @endif
                             <th class="border border-gray-300 px-4 py-2">{{$post->user->name }}</th>
+                            <th class="border border-gray-300 px-4 py-2">
+                                @if ($post->publish_status == 1)
+                                    <span class="text-green-600">Published</span>
+                                @else
+                                    <span class="text-red-600">Draft</span>
+                                @endif
+                            </th>
+
                             <th class="border border-gray-300 px-4 py-2">{{$post->updated_at->format('Y-m-d h:m A')}}</th>
                             <th class="border border-gray-300 px-4 py-2">
                         <a href="{{route('post.edit',$post->id)}}" 
@@ -62,7 +83,7 @@
                 @endforeach
 
             </table>
-            <div>
+            <div class="mt-4">
                     {{ $Posts->links() }} 
                 </div>
         </div>

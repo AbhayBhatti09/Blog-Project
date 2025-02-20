@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Session;
 use Auth;
+use Str;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Category;
@@ -29,7 +30,27 @@ class BlogController extends Controller
         $categories=Category::all();
         $search = $request->input('search');
        // $query = $request->input('search');
-        $category_id = $request->input('category');
+        $categorySlug = $request->query('category');
+        if ($categorySlug) {
+          
+          $category = Category::where('name', $categorySlug)->first();
+          if($category){
+            $category_id=$category->id;
+          }else{
+          $category_id = $request->input('category');
+
+        }
+         
+        }else{
+          $category_id = $request->input('category');
+
+        }
+        $selectedCategory = null;
+        if ($category_id) {
+            $selectedCategory = Category::where('id',$category_id)->first();
+        }
+       // dd($selectedCategory);
+       // $categorySlug = $request->query('category');  
         //$Posts = Post::orderBy('created_at', 'desc')->paginate(5);
         $Posts = Post::when($search, function ($query) use ($search) {
           return $query->where('title', 'LIKE', "%{$search}%")
@@ -42,6 +63,7 @@ class BlogController extends Controller
       ->when($category_id, function ($query) use ($category_id) {
           return $query->where('category_id', $category_id);
       })
+      ->where('publish_status',1)
       ->orderBy('created_at', 'desc')
       ->paginate(6);
         
@@ -52,7 +74,7 @@ class BlogController extends Controller
 
        
    
-         return view('blog.index',compact('Posts','categories'));
+         return view('blog.index',compact('Posts','categories','selectedCategory'));
     }
     //show blog
     public function show($id){

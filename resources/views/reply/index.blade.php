@@ -78,7 +78,7 @@
                         class="r px-3 py-1 rounded hover:bg-blue-600"  data-bs-toggle="modal" data-bs-target="#deleteModal_{{$reply->id}}"  data-comment-id="{{ $reply->id }}" title="status" data-bs>
                         <i class="fas fa-edit"></i>
                         </a>
-                        <a href="{{route('comment.delete',$comment->id)}}" 
+                        <a href="{{route('comment.delete',$reply->id)}}" 
                         class="show_confirm px-3 py-1 rounded hover:bg-red-600" id="softdelete" title="delete" data-bs>
                         <i class="fas fa-trash"></i>
                         </a>
@@ -111,7 +111,7 @@
                        
                        
                 </table>
-                <div>
+                <div class="mt-4">
                     {{ $Replies->links() }} 
                 </div>
             </div>

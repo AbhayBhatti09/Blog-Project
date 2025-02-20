@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class CategoryContrroller extends Controller
 {
     public function index(){
-        $Categories=category::latest()->paginate(10);
+        $Categories=category::latest()->paginate(5);
         return view('category.index',compact('Categories'));
     }
     //create category form
@@ -17,13 +17,21 @@ class CategoryContrroller extends Controller
     
     //store
     public function store(request $request){
-        //dd($request->all());
+      //
+      //   dd($request->all());
         $request->validate([
-            'name'=>'required|unique:category'
+            'name'=>'required|unique:category',
+            'descrpition'=>'required',
+            'image'=>'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $Category=new Category();
         $Category->name=$request->name;
+        $Category->descrpition=$request->descrpition;
+        //image
+        $imageName = time().'.'.$request->image->extension();  
+        $request->image->move(public_path('images/logo'), $imageName);
+        $Category->image=$imageName;
         $date=now();
        // dd($date);
         $Category->save();
@@ -44,9 +52,18 @@ class CategoryContrroller extends Controller
        // dd($request->all());
        // dd($id);
        $request->validate([
-        'name'=>'required'
+        'name'=>'required',
+        'descrpition'=>'required',
        ]);
-       $Category = Category::where('id', $id)->update(['name' => $request->name]);
+       if($request->image){
+        $imageName = time().'.'.$request->image->extension();  
+        $request->image->move(public_path('images/logo'), $imageName);
+        $Category = Category::where('id', $id)->update(['name' => $request->name,'descrpition'=>$request->descrpition,'image'=>$imageName]);
+  
+       }else{
+        $Category = Category::where('id', $id)->update(['name' => $request->name,'descrpition'=>$request->descrpition]);
+  
+       }
 
        return redirect('category')->with('success','category Updated');
     }

@@ -1,9 +1,5 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-center text-gray-800 leading-tight">
-            {{ __('Blogs') }}
-        </h2>
-    </x-slot>
+    
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -17,7 +13,7 @@
                         <select name="category" class="ml-4 p-2 border rounded">
                             <option value="">All Categories</option>
                             @foreach($categories as $category)
-                                <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                <option value="{{ $category->name }}" {{ request('category') == $category->id ? 'selected' : '' }}>
                                     {{ $category->name }}
                                 </option>
                             @endforeach
@@ -28,10 +24,37 @@
 
                     </div>
                 </form>
+                <div class="p-4 text-center border rounded-lg shadow-lg bg-gray">
+
+                @if(isset($selectedCategory))
+                <h4 class=" font-semibold text-gray-800 mb-1">Blog Category</h4>
+                    <h1 class="text-3xl font-semibold text-gray-800 mb-6 "><span class="inline-block border-b-4 border-blue-500 pb-1">{{ $selectedCategory->name }} </span></h1>
+                    <p>{{ $selectedCategory->descrpition }}</p>
+                @else
+                    <h1 class="text-3xl font-semibold text-gray-800 mb-6"><span class="inline-block border-b-4 border-blue-500 pb-1">Blogs </span></h1>
+                @endif
+                </div>
+<div class="p-6 text-center border-2 border-gray-300 rounded-lg shadow-lg bg-white mt-2">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        @foreach($categories as $category)
+            <a href="{{ url()->current() . '?category=' . \Illuminate\Support\Str::slug($category->name) }}" 
+               class="block transform transition duration-300 hover:scale-105">
+                <div class="p-2 text-lg font-medium text-gray-700 border rounded-lg h-auto shadow-md bg-gray-50 hover:bg-gray-100 flex items-center space-x-3">
+                    <img src="{{ asset('images/logo/' . $category->image) }}" alt="{{ $category->name }}" 
+                         class="w-16 h-16 object-cover rounded-full">
+                    <div>
+                        <strong class="block text-lg text-gray-900">{{ $category->name }}</strong>
+                        <p class="text-gray-600">{{ $category->descrpition }}</p>
+                    </div>
+                </div>
+            </a>
+        @endforeach
+    </div>
+</div>
 
 
                 <!-- Displaying Posts -->
-                <div id="post-list">
+                <div id="post-list" class="mt-8">
                     @include('Blog.partials.post-list')
                 </div>
             </div>

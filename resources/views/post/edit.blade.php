@@ -116,7 +116,8 @@
                               
                      </div>
                 
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Edit Post</button>
+                     <button type="submit" name="publish_status" value="0" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ">Save or Draft</button>
+                     <button type="submit" name="publish_status" value="1" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 ">Publish</button>
             </form>
         </div>
     </div>

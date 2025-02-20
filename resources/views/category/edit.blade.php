@@ -13,7 +13,7 @@
             <a href="{{ route('category.index') }}" class="bg-blue-500 text-white px-4 py-2 rounded">Back</a>
         </div>
 
-                <form action="{{route('category.update',$Category->id)}}" method="POST">
+                <form action="{{route('category.update',$Category->id)}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-4">
                         <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Category Name:</label>
@@ -22,6 +22,57 @@
                         <span class="text-red-500 text-sm">{{$message}}</span>
                         @enderror
                     </div>
+                    <div class="mb-4">
+                        <label for="name" class="block text-gray-700 text-sm font-bold mb-2"> Description:</label>
+                        <textarea name="descrpition" id="name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" >{{$Category->descrpition}}</textarea>
+                        @error('descrpition')
+                        <span class="text-red-500 text-sm">{{$message}}</span>
+                        @enderror
+                    </div>
+                    <div class="row">
+                               <div class="col-md-6">
+                                <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                    <span class="d-none d-sm-block ">Attach logo</span>
+                                    <i class="bx bx-upload d-block d-sm-none"></i>
+                                    <input
+                                    type="file"
+                                    id="upload"
+                                    name="image"
+                                    hidden
+                                    accept="image/png, image/jpeg"
+                                    />
+                                </label>
+                                @error('image')
+                                <span class="text-red-500 text-sm">{{$message}}</span>
+                                @enderror
+
+                                </div>
+                                <div class="col-md-6">
+                                @if($Category->image)
+                                <img
+                                src="{{ asset('images/logo/'.$Category->image) }}"
+                                alt="user-avatar"
+                                class="d-block rounded mb-4"
+                                height="100"  
+                                width="100"
+                                id="uploadedAvatar"
+                                />
+                                @else
+
+                                <img
+                                src="{{ asset('storage/images/default.jpg') }}"
+                                alt="user-avatar"
+                                class="d-block rounded mb-4"
+                                height="100"  
+                                width="100"
+                                id="uploadedAvatar"
+                                />
+                                <span class="text-danger">*</span>
+                               
+
+                                @endif
+                            </div>
+                            </div>
                     <div class="flex items-center justify-between">
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                             Update Category
@@ -31,4 +82,15 @@
             </div>
         </div>
     </div>
+    <script>
+    document.getElementById('upload').addEventListener('change', function (event) {
+     //   alert('ab');
+        const [file] = event.target.files; // Get the selected file
+        if (file) {
+            const uploadedAvatar = document.getElementById('uploadedAvatar'); // Get the img element
+            uploadedAvatar.src = URL.createObjectURL(file); // Update image src with selected file
+        }
+    });
+</script>
+
 </x-app-layout>

@@ -3,7 +3,7 @@
         @foreach($Posts as $post)
            
             <div class="border p-4 rounded shadow">
-                <a href="{{ route('blog.show', $post->id) }}">
+                <a href="{{ route('blog.show', $post->id) }}" class="block transform transition duration-300 hover:scale-105">
                 @if(!empty($post->image))
                     <img src="{{ asset('images/'.$post->image) }}" alt="{{ $post->title }}" class="w-full h-40 object-cover">
                 @else
@@ -19,7 +19,8 @@
                     <p class="text-sm text-gray-600">Category: {{ $category->name ?? 'Uncategorized' }}</p>
                 @endif
                 
-                <a href="{{ route('blog.show', $post->id) }}" class="text-blue-500 mt-2 inline-block">Read More</a>
+                <a href="{{ route('blog.show', $post->id) }}" class="text-blue-500 mt-2 inline-block relative group">Read More     <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-blue-500 transition-all duration-1000 group-hover:w-full"></span>
+                </a>
                 </a>
             </div>
         @endforeach
